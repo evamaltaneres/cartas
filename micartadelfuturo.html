@@ -187,7 +187,7 @@
             fabricCanvas.setHeight(textoFabric.height + 80);
             fabricCanvas.renderAll();
 
-            const imagenDataURL = fabricCanvas.toDataURL({ format: 'png' });
+            const imagenDataURL = fabricCanvas.toDataURL({ format: 'jpg' });
 
             const imagenCartaElemento = document.getElementById('imagenCarta');
             imagenCartaElemento.src = imagenDataURL;
