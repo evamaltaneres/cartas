@@ -1,210 +1,322 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carta del Futuro - Versión Final</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carta del Futuro - Versión Final</title>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+  <!-- Fabric.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
 
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0; 
-            padding: 20px;
-            background-color: #f8f0e3; 
-        }
-        .contenedor-principal {
-            margin: 0 auto;
-            max-width: 800px;
-        }
-        h1, h2 {
-            text-align: center;
-            color: #333;
-        }
-        .cuestionario {
-            background-color: #ffffff;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 40px; 
-        }
-        .pregunta {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #555;
-        }
-        input[type="text"], textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 1rem;
-        }
-        textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-        button {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s, opacity 0.3s;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        button:disabled {
-            background-color: #555;
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
-        #contenedorImagenCarta {
-            margin-top: 30px;
-            text-align: center;
-            background-color: #fff; 
-            padding: 20px;
-            border: 1px solid #ddd; 
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
-        }
-        #imagenCarta {
-            max-width: 100%;
-            border: none;
-            background-color: transparent;
-        }
-        .canvas-container {
-            display: none !important;
-        }
-    </style>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap" rel="stylesheet" />
+
+  <!-- Precarga para que el canvas detecte la fuente -->
+  <style>
+    .preload-font {
+      font-family: 'Cedarville Cursive';
+      position: absolute;
+      visibility: hidden;
+      height: 0;
+      overflow: hidden;
+    }
+  </style>
+  <span class="preload-font">abc</span>
+
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+      background-color: #f8f0e3;
+    }
+
+    .contenedor-principal {
+      margin: 0 auto;
+      max-width: 800px;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    .cuestionario {
+      background-color: #ffffff;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 40px;
+    }
+
+    .pregunta {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #555;
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 1rem;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s, opacity 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    button:disabled {
+      background-color: #555;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    #contenedorImagenCarta {
+      margin-top: 30px;
+      text-align: center;
+      background-color: #fff;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    #imagenCarta {
+      max-width: 100%;
+      border: none;
+      background-color: transparent;
+    }
+  </style>
 </head>
 <body>
+  <div class="contenedor-principal">
+    <h1>Tu Carta del Futuro</h1>
+    <p style="text-align: center;">Llena el cuestionario y se generará una carta de tu "yo del futuro" como una imagen con letra cursiva.</p>
 
-    <div class="contenedor-principal">
-        <h1>Tu Carta del Futuro</h1>
-        <p style="text-align: center;">Llena el cuestionario y se generará una carta de tu "yo del futuro" como una imagen con letra cursiva.</p>
+    <div class="cuestionario">
+      <div class="pregunta">
+        <label for="nombre">¿Cuál es tu nombre?</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Escribe tu nombre aquí">
+      </div>
 
-        <div class="cuestionario">
-            <div class="pregunta">
-                <label for="nombre">¿Cuál es tu nombre?</label>
-                <input type="text" id="nombre" name="nombre" placeholder="Escribe tu nombre aquí">
-            </div>
+      <div class="pregunta">
+        <label for="clases">¿Cómo son tus clases ahora?</label>
+        <textarea id="clases" name="clases" placeholder="Ej: 'Intensas, aprendiendo sobre desarrollo de software y bases de datos'"></textarea>
+      </div>
 
-            <div class="pregunta">
-                <label for="clases">¿Cómo son tus clases ahora?</label>
-                <textarea id="clases" name="clases" placeholder="Ej: 'Intensas, aprendiendo sobre desarrollo de software y bases de datos'"></textarea>
-            </div>
+      <div class="pregunta">
+        <label for="tecnologias">¿Qué tecnologías usás?</label>
+        <textarea id="tecnologias" name="tecnologias" placeholder="Ej: 'JavaScript, Python, y un poco de React'"></textarea>
+      </div>
 
-            <div class="pregunta">
-                <label for="tecnologias">¿Qué tecnologías usás?</label>
-                <textarea id="tecnologias" name="tecnologias" placeholder="Ej: 'JavaScript, Python, y un poco de React'"></textarea>
-            </div>
+      <div class="pregunta">
+        <label for="desafios">¿Qué desafíos superaste?</label>
+        <textarea id="desafios" name="desafios" placeholder="Ej: 'Logré terminar un proyecto final que parecía imposible'"></textarea>
+      </div>
 
-            <div class="pregunta">
-                <label for="desafios">¿Qué desafíos superaste?</label>
-                <textarea id="desafios" name="desafios" placeholder="Ej: 'Logré terminar un proyecto final que parecía imposible'"></textarea>
-            </div>
+      <div class="pregunta">
+        <label for="mensaje">¿Qué le querés decir a tu yo del presente?</label>
+        <textarea id="mensaje" name="mensaje" placeholder="Ej: 'Que no tenga miedo a equivocarme y que confíe en el proceso'"></textarea>
+      </div>
 
-            <div class="pregunta">
-                <label for="mensaje">¿Qué le querés decir a tu yo del presente?</label>
-                <textarea id="mensaje" name="mensaje" placeholder="Ej: 'Que no tenga miedo a equivocarme y que confíe en el proceso'"></textarea>
-            </div>
-            
-            <button id="generadorBtn" onclick="generarCartaComoImagen()">Generar Carta como Imagen</button>
-        </div>
-
-        <div id="contenedorImagenCarta" style="display:none;">
-            <h2>Tu carta en imagen:</h2>
-            <p style="text-align:center; font-size: 0.9em; color: #666;">(Puedes hacer clic derecho sobre la imagen para guardarla)</p>
-            <img id="imagenCarta" src="" alt="Carta del Futuro">
-        </div>
+      <button id="generadorBtn" onclick="generarCartaComoImagen()">Generar Carta como Imagen</button>
     </div>
 
-<script>
-    async function generarCartaComoImagen() {
-    const boton = document.getElementById('generadorBtn');
+    <div id="contenedorImagenCarta" style="display:none;">
+      <h2>Tu carta en imagen:</h2>
+      <p style="text-align:center; font-size: 0.9em; color: #666;">(Puedes hacer clic derecho sobre la imagen para guardarla)</p>
+      <img id="imagenCarta" src="" alt="Carta del Futuro">
+    </div>
+  </div>
 
-    boton.disabled = true;
-    boton.textContent = 'Generando imagen...';
-    await new Promise(resolve => setTimeout(resolve, 20));
+  <script>
+async function generarCartaComoImagen() {
+  const boton = document.getElementById('generadorBtn');
+  boton.disabled = true;
+  boton.textContent = 'Generando imagen...';
 
-    if (typeof fabric === 'undefined') {
-        alert('Error: La librería para crear imágenes no se pudo cargar.\n\nPor favor, asegúrate de tener una conexión a internet activa y vuelve a intentarlo.');
-        boton.disabled = false;
-        boton.textContent = 'Generar Carta como Imagen';
-        return;
+  try {
+    await document.fonts.load('22px "Cedarville Cursive"');
+    await document.fonts.ready;
+  } catch (error) {
+    console.error('Error esperando a que las fuentes carguen:', error);
+    alert('Error: La fuente cursiva no se pudo cargar. Revisa tu conexión a internet.');
+    boton.disabled = false;
+    boton.textContent = 'Generar Carta como Imagen';
+    return;
+  }
+
+  await new Promise(resolve => setTimeout(resolve, 50));
+
+  if (typeof fabric === 'undefined') {
+    alert('Error: La librería para crear imágenes no se pudo cargar.\n\nPor favor, asegúrate de tener una conexión a internet activa y vuelve a intentarlo.');
+    boton.disabled = false;
+    boton.textContent = 'Generar Carta como Imagen';
+    return;
+  }
+
+  try {
+    const nombre = document.getElementById('nombre').value.trim();
+    const clases = document.getElementById('clases').value.trim();
+    const tecnologias = document.getElementById('tecnologias').value.trim();
+    const desafios = document.getElementById('desafios').value.trim();
+    const mensaje = document.getElementById('mensaje').value.trim();
+
+    if (!nombre || !clases || !tecnologias || !desafios || !mensaje) {
+      alert('Por favor, completa todas las preguntas para generar tu carta.');
+      boton.disabled = false;
+      boton.textContent = 'Generar Carta como Imagen';
+      return;
     }
 
-    try {
-        const nombre = document.getElementById('nombre').value;
-        const clases = document.getElementById('clases').value;
-        const tecnologias = document.getElementById('tecnologias').value;
-        const desafios = document.getElementById('desafios').value;
-        const mensaje = document.getElementById('mensaje').value;
+    const cartaTexto = `Querido/a ${nombre},\n\nTe escribo desde un futuro que quizás ahora te cueste imaginar, pero quiero que sepas que todo el esfuerzo tiene sentido. A menudo pienso en el pasado y te veo ahí, justo donde estás ahora.\n\nRecuerdo bien esa etapa tuya, con esas clases que describiste como "${clases}". Parecían un mundo en sí mismas, ¿verdad? Pues bien, fueron el cimiento perfecto para lo que hago hoy. Mi trabajo se basa en esos principios, aunque los aplicamos a una escala que te sorprendería.\n\nMe causa una sonrisa nostálgica que estés usando "${tecnologias}". ¡No te imaginas cómo evolucionó todo! Esas herramientas que estás dominando son las precursoras de los sistemas con los que hoy diseño y construyo soluciones innovadoras. Sigue por ese camino, porque la base que estás creando es más sólida de lo que crees.\n\nY sobre todo, no he olvidado los momentos difíciles. Mencionaste que superaste el desafío de "${desafios}". Esa capacidad para sobreponerte es, sin duda, la habilidad más importante que tenemos. Aquí, en mi día a día, me enfrento a problemas complejos, y es esa misma determinación la que me permite encontrar soluciones y seguir adelante. Ese obstáculo te forjó.\n\nPor último, leí el mensaje que te dejaste: "${mensaje}". Quiero decirte que esa idea se convirtió en nuestro mantra. Ha sido la brújula en momentos de incertidumbre y la razón por la que hoy disfruto de un trabajo que me desafía y me apasiona. No olvides nunca esas palabras.\n\nSigue aprendiendo, sigue luchando. Vas por el camino correcto.\n\nCon todo el apoyo,\n\nTu yo del futuro.`;
 
-        if (!nombre || !clases || !tecnologias || !desafios || !mensaje) {
-            alert('Por favor, completa todas las preguntas para generar tu carta.');
-            return;
-        }
+    const canvasElement = document.createElement('canvas');
+    const anchoCanvas = 700;
 
-        const cartaTexto = `Querido/a ${nombre},\n\nTe escribo desde un futuro que quizás ahora te cueste imaginar, pero quiero que sepas que todo el esfuerzo tiene sentido. A menudo pienso en el pasado y te veo ahí, justo donde estás ahora.\n\nRecuerdo bien esa etapa tuya, con esas clases que describiste como "${clases}". Parecían un mundo en sí mismas, ¿verdad? Pues bien, fueron el cimiento perfecto para lo que hago hoy. Mi trabajo se basa en esos principios, aunque los aplicamos a una escala que te sorprendería.\n\nMe causa una sonrisa nostálgica que estés usando "${tecnologias}". ¡No te imaginas cómo evolucionó todo! Esas herramientas que estás dominando son las precursoras de los sistemas con los que hoy diseño y construyo soluciones innovadoras. Sigue por ese camino, porque la base que estás creando es más sólida de lo que crees.\n\nY sobre todo, no he olvidado los momentos difíciles. Mencionaste que superaste el desafío de "${desafios}". Esa capacidad para sobreponerte es, sin duda, la habilidad más importante que tenemos. Aquí, en mi día a día, me enfrento a problemas complejos, y es esa misma determinación la que me permite encontrar soluciones y seguir adelante. Ese obstáculo te forjó.\n\nPor último, leí el mensaje que te dejaste: "${mensaje}". Quiero decirte que esa idea se convirtió en nuestro mantra. Ha sido la brújula en momentos de incertidumbre y la razón por la que hoy disfruto de un trabajo que me desafía y me apasiona. No olvides nunca esas palabras.\n\nSigue aprendiendo, sigue luchando. Vas por el camino correcto.\n\nCon todo el apoyo,\n\nTu yo del futuro.`;
-        
-        const canvasElement = document.createElement('canvas');
-        const anchoCanvas = 700;
-        
-        
-        const fabricCanvas = new fabric.Canvas(canvasElement, {
-            width: anchoCanvas,
-            height: 100, 
-            backgroundColor: '#ffffff' /* Arreglo Fede */
-        });
+    const fabricCanvas = new fabric.Canvas(canvasElement, {
+      width: anchoCanvas,
+      height: 100,
+      backgroundColor: '#ffffff' // blanco temporal mientras carga la textura
+    });
 
-        const textoFabric = new fabric.Textbox(cartaTexto, {
-            left: 40,
-            top: 40,
-            width: anchoCanvas - 80,
-            fontSize: 22,
-            fontFamily: 'cursive',
-            fill: '#2c3e50',
-            textAlign: 'left',
-            lineHeight: 1.4
-        });
+const texturaUrl = 'https://cdn.pixabay.com/photo/2016/09/22/12/29/old-1683139_1280.jpg'; // textura de papel antiguo
 
-        fabricCanvas.add(textoFabric);
-        
-        fabricCanvas.setHeight(textoFabric.height + 80);
-        fabricCanvas.renderAll();
+fabric.Image.fromURL(texturaUrl, function(imgFondo) {
+  const textoFabric = new fabric.Textbox(cartaTexto, {
+    left: 60,
+    top: 60,
+    width: anchoCanvas - 120,
+    fontSize: 22,
+    fontFamily: 'Cedarville Cursive',
+    fontWeight: 400,
+    fill: '#2c2c2c',
+    textAlign: 'left',
+    lineHeight: 1.4,
+    selectable: false,
+    evented: false
+  });
 
-        
-        const imagenDataURL = fabricCanvas.toDataURL({ format: 'png' });
+  const alturaTotal = textoFabric.height + 120;
 
-    
-        const imagenCartaElemento = document.getElementById('imagenCarta');
-        imagenCartaElemento.src = imagenDataURL;
-        document.getElementById('contenedorImagenCarta').style.display = 'block';
+  imgFondo.set({
+    left: 0,
+    top: 0,
+    scaleX: anchoCanvas / imgFondo.width,
+    scaleY: alturaTotal / imgFondo.height,
+    selectable: false,
+    evented: false,
+    opacity: 0.9
+  });
 
-    } catch (error) {
-        console.error('Ocurrió un error al generar la imagen:', error);
-        alert('Lo siento, ocurrió un error inesperado al generar la imagen. Por favor, intenta de nuevo.');
-    } finally {
-        boton.disabled = false;
-        boton.textContent = 'Generar Carta como Imagen';
-    }
+  fabricCanvas.clear();
+
+  // Agregar fondo
+  fabricCanvas.add(imgFondo);
+
+  // Marco decorativo tipo "biselado"
+  const marco = new fabric.Rect({
+    left: 10,
+    top: 10,
+    width: anchoCanvas - 20,
+    height: alturaTotal - 20,
+    rx: 15,
+    ry: 15,
+    fill: 'transparent',
+    stroke: '#8b5e3c', 
+    strokeWidth: 6,
+    shadow: new fabric.Shadow({
+      color: 'rgba(0,0,0,0.2)',
+      blur: 8,
+      offsetX: 2,
+      offsetY: 4
+    }),
+    selectable: false,
+    evented: false
+  });
+  fabricCanvas.add(marco);
+
+  // Rectángulo semitransparente claro para legibilidad del texto
+  const fondoTexto = new fabric.Rect({
+    left: 40,
+    top: 40,
+    width: anchoCanvas - 80,
+    height: textoFabric.height + 40,
+    fill: 'rgba(255, 255, 240, 0.8)', 
+    rx: 15,
+    ry: 15,
+    selectable: false,
+    evented: false,
+    shadow: new fabric.Shadow({
+      color: 'rgba(0,0,0,0.15)',
+      blur: 10,
+      offsetX: 0,
+      offsetY: 4
+    })
+  });
+  fabricCanvas.add(fondoTexto);
+  fabricCanvas.add(textoFabric);
+
+  fabricCanvas.setHeight(alturaTotal);
+  fabricCanvas.renderAll();
+
+  const imagenDataURL = fabricCanvas.toDataURL({ format: 'png' });
+
+  const imagenCartaElemento = document.getElementById('imagenCarta');
+  imagenCartaElemento.src = imagenDataURL;
+  document.getElementById('contenedorImagenCarta').style.display = 'block';
+
+  const enlaceDescarga = document.createElement('a');
+  enlaceDescarga.href = imagenDataURL;
+  enlaceDescarga.download = `carta_del_futuro_${nombre.replace(/\s+/g, "_").toLowerCase()}.png`;
+  document.body.appendChild(enlaceDescarga);
+  enlaceDescarga.click();
+  document.body.removeChild(enlaceDescarga);
+
+  boton.disabled = false;
+  boton.textContent = 'Generar Carta como Imagen';
+
+}, {
+  crossOrigin: 'anonymous'
+});
+
+  } catch (error) {
+    console.error('Ocurrió un error al generar la imagen:', error);
+    alert('Lo siento, ocurrió un error inesperado al generar la imagen. Por favor, intenta de nuevo.');
+    boton.disabled = false;
+    boton.textContent = 'Generar Carta como Imagen';
+  }
 }
-</script>
-
+  </script>
 </body>
 </html>
